@@ -1,57 +1,74 @@
-from re import I
+import csv
+
+def Import():
+    with open('data.csv', newline='') as in_file:
+        reader = csv.reader(in_file)
+        dataset = list(reader)
+        dataset.pop(0)
+
+    Start(dataset)
 
 
-def Start():
+def Start(dataset):
+    n = len(dataset)
+    print(n)
+    while True:
+        print("How should the data be sorted\n1 - Weight\n2 - Height")
+        selection = input("")
 
-    a = [6,10,7,9,1,0,11,13,100,67,34,56,12,76,45]
-    n = len(a)
+        if selection == "1":
+            sortby = 2
+            print("Weight selected")
+            break
+        elif selection == "2":
+            sortby = 3
+            print("Height selected")
+            break
+        else: 
+            print("Incorrect entry")
+    while True:
+        print("Which sorting algorithm would you like to use?\n1 - Bubble\n2 - Selection")
+        selection = input("")
 
-    print("Which sorting algorithm would you like to use?\n1 - Bubble\n2 - Selection")
-    selection = input("")
+        if selection == "1":
+            Bubble(dataset,n,sortby)
+            break
+        elif selection == "2":
+            Selection(dataset,n,sortby)
+            break
+        else: 
+            print("Incorrect entry")
 
-    if selection == "1":
-        Bubble(a,n)
-    elif selection == "2":
-        Selection(a,n)
 
 def Bubble(a,n):
     x = 0
     while x < n - 1:
         i = 0
         while i < n - 1:
-            if (a[i]>a[i+1]):
-
-                temp = a[i]
-                a[i] = a[i+1]
-                a[i+1] = temp
-        
+            if ([i]>a[i+1]):
+                a[i], a[i+1] = a[i+1], a[i]
             i = i + 1
         x = x + 1
 
-    print(a)
-    input("")
+    exportfile(a)
 
 def Selection(a,n):
-    i = 0
+    for i in range(len(a)):
+        min_idx = i
+        for j in range(i+1, len(a)):
+            if a[min_idx] > a[j]:
+                min_idx = j   
+        a[i], a[min_idx] = a[min_idx], a[i]
 
-    while i < n-1:
-        print("A")
-        min_index = i
-        j = i + 1
-        
-        while j < n:
-            if a[j] < a[min_index]:
-                min_index = j
-                j = j + 1
-                print("B")
-        temp = a[min_index]
-        a[min_index] = a[i]
-        a[i] = temp
-        print("C")
-        i = i + 1
-            
-    print(a)
-    input("")
+    exportfile(a)
+
+def exportfile(dataset):
+    fields = ["Species","Gender","Weight(kg)","Height(cm)","Location"]
+    rows = dataset
+    with open("output_file.csv", "w", newline="") as out_file:
+        write = csv.writer(out_file)
+        write.writerow(fields)
+        write.writerows(rows)
 
 
-Start()
+Import()
