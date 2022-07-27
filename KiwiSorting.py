@@ -1,74 +1,70 @@
-import csv
+def Start():
+    arr = [10,30,1,45,90,5]
 
-def Import():
-    with open('data.csv', newline='') as in_file:
-        reader = csv.reader(in_file)
-        dataset = list(reader)
-        dataset.pop(0)
-
-    Start(dataset)
-
-
-def Start(dataset):
-    n = len(dataset)
-    print(n)
     while True:
-        print("How should the data be sorted\n1 - Weight\n2 - Height")
-        selection = input("")
-
-        if selection == "1":
-            sortby = 2
-            print("Weight selected")
+        sortby = input("Which sorting algorithm do you want to use?\n1 - Bubble\n2 - Selection\n3 - Insertion\n")
+        
+        if sortby == "1":
+            Bubble(arr)
             break
-        elif selection == "2":
-            sortby = 3
-            print("Height selected")
+        elif sortby == "2":
+            Selection(arr)
+            break
+        elif sortby == "3":
+            Insertion(arr)
             break
         else: 
-            print("Incorrect entry")
-    while True:
-        print("Which sorting algorithm would you like to use?\n1 - Bubble\n2 - Selection")
-        selection = input("")
-
-        if selection == "1":
-            Bubble(dataset,n,sortby)
-            break
-        elif selection == "2":
-            Selection(dataset,n,sortby)
-            break
-        else: 
-            print("Incorrect entry")
+            print("Incorrect input!")
 
 
-def Bubble(a,n):
-    x = 0
-    while x < n - 1:
-        i = 0
-        while i < n - 1:
-            if ([i]>a[i+1]):
-                a[i], a[i+1] = a[i+1], a[i]
-            i = i + 1
-        x = x + 1
+#Bubble sort
+def Bubble(arr):
+    sort = "bubble"
 
-    exportfile(a)
+    n = len(arr)
+    swapped = False
+    for i in range(n-1):
+        for j in range(0, n-i-1):
+            if arr[j] > arr[j + 1]:
+                swapped = True
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+            
+        if not swapped:
+            return
 
-def Selection(a,n):
-    for i in range(len(a)):
+    finish(arr,sort)
+
+#Selection sort
+def Selection(arr):
+    sort = "selection"
+
+    for i in range(len(arr)):
         min_idx = i
-        for j in range(i+1, len(a)):
-            if a[min_idx] > a[j]:
-                min_idx = j   
-        a[i], a[min_idx] = a[min_idx], a[i]
+        for j in range(i+1, len(arr)):
+            if arr[min_idx] > arr[j]:
+                min_idx = j 
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    
+    finish(arr,sort)
 
-    exportfile(a)
+#Insertion sort
+def Insertion(arr):
+    sort = "insertion"
 
-def exportfile(dataset):
-    fields = ["Species","Gender","Weight(kg)","Height(cm)","Location"]
-    rows = dataset
-    with open("output_file.csv", "w", newline="") as out_file:
-        write = csv.writer(out_file)
-        write.writerow(fields)
-        write.writerows(rows)
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i-1
+        while j >=0 and key < arr[j] :
+                arr[j+1] = arr[j]
+                j -= 1
+        arr[j+1] = key
+    
+    finish(arr,sort)
+
+def finish(arr,sort):
+
+    print("List sorted using " + sort + " sort:\n")
+    print(arr)
 
 
-Import()
+Start()
